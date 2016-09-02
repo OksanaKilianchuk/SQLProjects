@@ -13,7 +13,6 @@ public class Main {
 
     public static void main(String[] args) {
 
-
         try (Scanner sc = new Scanner(System.in)) {
             try {
                 conn = DriverManager.getConnection(DB_CONNECTION, DB_USER, DB_PASSWORD);
@@ -36,7 +35,7 @@ public class Main {
                             viewAllFlats();
                             break;
                         default:
-                            return;
+                            System.out.println("Enter correct command, please");
                     }
                 }
             } finally {
@@ -77,21 +76,27 @@ public class Main {
         String value = sc.nextLine();
         PreparedStatement ps = null;
         try {
-            if (parameter.equals("region")) {
-                ps = conn.prepareStatement("SELECT * FROM Flats WHERE region = ?");
-                ps.setString(1, value);
-            } else if (parameter.equals("square")) {
-                ps = conn.prepareStatement("SELECT * FROM Flats WHERE square = ?");
-                ps.setDouble(1, Double.parseDouble(value));
-            } else if (parameter.equals("room_count")) {
-                ps = conn.prepareStatement("SELECT * FROM Flats WHERE room_count = ?");
-                ps.setInt(1, Integer.parseInt(value));
-            } else if (parameter.equals("address")) {
-                ps = conn.prepareStatement("SELECT * FROM Flats WHERE address = ?");
-                ps.setString(1, value);
-            } else if (parameter.equals("price")) {
-                ps = conn.prepareStatement("SELECT * FROM Flats WHERE price = ?");
-                ps.setDouble(1, Double.parseDouble(value));
+            switch (parameter) {
+                case "region":
+                    ps = conn.prepareStatement("SELECT * FROM Flats WHERE region = ?");
+                    ps.setString(1, value);
+                    break;
+                case "square":
+                    ps = conn.prepareStatement("SELECT * FROM Flats WHERE square = ?");
+                    ps.setDouble(1, Double.parseDouble(value));
+                    break;
+                case "room_count":
+                    ps = conn.prepareStatement("SELECT * FROM Flats WHERE room_count = ?");
+                    ps.setInt(1, Integer.parseInt(value));
+                    break;
+                case "address":
+                    ps = conn.prepareStatement("SELECT * FROM Flats WHERE address = ?");
+                    ps.setString(1, value);
+                    break;
+                case "price":
+                    ps = conn.prepareStatement("SELECT * FROM Flats WHERE price = ?");
+                    ps.setDouble(1, Double.parseDouble(value));
+                    break;
             }
             if (ps != null) {
                 ResultSet rs = ps.executeQuery();
@@ -107,7 +112,7 @@ public class Main {
             ResultSetMetaData md = rs.getMetaData();
 
             for (int i = 1; i <= md.getColumnCount(); i++)
-                System.out.print("\t"+md.getColumnName(i) + "\t\t");
+                System.out.print("\t" + md.getColumnName(i) + "\t\t");
             System.out.println();
 
             while (rs.next()) {
